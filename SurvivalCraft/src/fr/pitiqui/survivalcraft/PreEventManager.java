@@ -123,7 +123,7 @@ public class PreEventManager implements Listener
 						winnertemp.kickPlayer("Congrats !");
 						GameManager.endGame();
 					}
-				}, 200L);
+				}, 400L);
 		}
 	}
 	
