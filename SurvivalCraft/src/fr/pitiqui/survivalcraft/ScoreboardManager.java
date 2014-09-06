@@ -46,7 +46,7 @@ public class ScoreboardManager implements Listener
 			@Override
 			public void run()
 			{
-				s1.setScore(s1.getScore() - 1);
+				s1.setScore(s1.getScore() -1);
 				
 				if(s1.getScore() == 0)
 				{
@@ -57,7 +57,7 @@ public class ScoreboardManager implements Listener
 					Bukkit.getScheduler().cancelTask(id);
 				}
 			}
-		}, 0L, 20L);
+		}, 220L, 20L);
 	}
 	
 	@EventHandler

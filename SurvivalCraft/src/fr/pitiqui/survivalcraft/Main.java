@@ -40,7 +40,7 @@ public class Main extends JavaPlugin implements Listener
 		wc.type(WorldType.NORMAL);
 		wc.createWorld();
 		
-		Bukkit.getWorld("sg").setSpawnLocation(0, 0, 0);
+		Bukkit.getWorld("sg").setSpawnLocation(0, 70, 0);
 		
 		createBorders();
 		

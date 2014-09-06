@@ -33,9 +33,79 @@ public class GameManager implements Listener
 	
 	public static void startGame()
 	{
-		Main.joinable = "ingame";
-		
 		ScoreboardManager.startCountdown();
+		
+		for(final Player p : Bukkit.getServer().getOnlinePlayers())
+		{
+			Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
+				@Override
+				public void run() {
+					p.sendMessage(ChatColor.RED + "The game start in 10...");
+				}
+			}, 20L);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
+				@Override
+				public void run() {
+					p.sendMessage(ChatColor.RED + "The game start in 9...");
+				}
+			}, 40L);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
+				@Override
+				public void run() {
+					p.sendMessage(ChatColor.RED + "The game start in 8...");
+				}
+			}, 60L);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
+				@Override
+				public void run() {
+					p.sendMessage(ChatColor.RED + "The game start in 7...");
+				}
+			}, 80L);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
+				@Override
+				public void run() {
+					p.sendMessage(ChatColor.RED + "The game start in 6...");
+				}
+			}, 100L);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
+				@Override
+				public void run() {
+					p.sendMessage(ChatColor.RED + "The game start in 5...");
+				}
+			}, 120L);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
+				@Override
+				public void run() {
+					p.sendMessage(ChatColor.RED + "The game start in 4...");
+				}
+			}, 140L);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
+				@Override
+				public void run() {
+					p.sendMessage(ChatColor.RED + "The game start in 3...");
+				}
+			}, 160L);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
+				@Override
+				public void run() {
+					p.sendMessage(ChatColor.RED + "The game start in 2...");
+				}
+			}, 180L);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
+				@Override
+				public void run() {
+					p.sendMessage(ChatColor.RED + "The game start in 1...");
+				}
+			}, 200L);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
+				@Override
+				public void run() {
+					p.sendMessage(ChatColor.RED + "The game has started !");
+					Main.joinable = "ingame";
+					
+				}
+			}, 220L);
+		}
 	}
 	
 	public static void endGame()
