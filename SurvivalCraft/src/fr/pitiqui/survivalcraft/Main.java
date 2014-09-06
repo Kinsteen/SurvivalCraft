@@ -138,6 +138,7 @@ public class Main extends JavaPlugin implements Listener
 	{
 		this.getConfig().addDefault("restart", true);
 		this.getConfig().addDefault("mapsize", 1000);
+		this.saveDefaultConfig();
 		restart = getConfig().getBoolean("restart");
 		mapsize = getConfig().getInt("mapsize");
 	}
