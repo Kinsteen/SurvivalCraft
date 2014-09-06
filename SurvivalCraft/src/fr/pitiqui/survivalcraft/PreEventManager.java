@@ -30,19 +30,19 @@ public class PreEventManager implements Listener
 		    public void run() {
 				if(Main.joinable == "startup")
 				{
-					e.getPlayer().kickPlayer("Attendez un peu que le serveur redémarre ;)");
+					e.getPlayer().kickPlayer("Wait before the server restart !");
 					return;
 				}
 				
 				if(Main.joinable == "endgame")
 				{
-					e.getPlayer().kickPlayer("La partie vient de terminer ! Il redémarre dans quelques secondes...");
+					e.getPlayer().kickPlayer("The game has been finished !");
 					return;
 				}
 				
 				if(Main.joinable == "ingame")
 				{
-					e.getPlayer().kickPlayer("Une partie est en cours !");
+					e.getPlayer().kickPlayer("A game is in progress !");
 					return;
 				}
 				
@@ -82,7 +82,7 @@ public class PreEventManager implements Listener
 					winner = temp;
 				}
 			}
-				winner.sendMessage(ChatColor.GREEN + "Bravo ! Vous avez gagné ! Bonne chance pour la prochaine partie !");
+				winner.sendMessage(ChatColor.GREEN + "Congrats ! You win !");
 				Firework fw = Bukkit.getWorld("sg").spawn(winner.getLocation(), Firework.class);
 				FireworkMeta fwm = fw.getFireworkMeta();
 	            Random r = new Random();   
@@ -120,7 +120,7 @@ public class PreEventManager implements Listener
 					
 					@Override
 					public void run() {
-						winnertemp.kickPlayer("Bravo !");
+						winnertemp.kickPlayer("Congrats !");
 						GameManager.endGame();
 					}
 				}, 200L);
@@ -132,21 +132,20 @@ public class PreEventManager implements Listener
 	{
 		if(Main.joinable == "startup")
 		{
-			e.setMotd("Le serveur démarre !");
+			e.setMotd("The server restart !");
 		}
 		
 		else if(Main.joinable == "endgame")
 		{
-			e.setMotd("La partie vient de terminer ! (chanceux)");
+			e.setMotd("The game finished !");
 		}
 		else if(Main.joinable == "ingame")
 		{
-			e.setMotd("La partie est en cours !");
+			e.setMotd("A game is in progress !");
 		}
 		
 		else if(Main.joinable == "true")
 		{
-			e.setMotd("Venez vite ! Il reste " + (e.getMaxPlayers() - e.getNumPlayers()) + " place !");
 		}
 	}
 }

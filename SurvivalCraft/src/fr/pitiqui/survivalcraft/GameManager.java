@@ -20,8 +20,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -46,7 +44,7 @@ public class GameManager implements Listener
 		
 		for(Player p : Bukkit.getOnlinePlayers())
 		{
-			p.kickPlayer("Le jeu est terminé !");
+			p.kickPlayer("The game is finished !");
 		}
 		
 		Bukkit.getServer().unloadWorld("sg", true);
@@ -131,7 +129,7 @@ public class GameManager implements Listener
 					winner = temp;
 				}
 			}
-				winner.sendMessage(ChatColor.GREEN + "Bravo ! Vous avez gagné ! Bonne chance pour la prochaine partie !");
+				winner.sendMessage(ChatColor.GREEN + "Congrats ! You win ! Good luck for the next game !");
 				Firework fw = Bukkit.getWorld("sg").spawn(winner.getLocation(), Firework.class);
 				FireworkMeta fwm = fw.getFireworkMeta();
 	            Random r = new Random();   
@@ -169,7 +167,7 @@ public class GameManager implements Listener
 					
 					@Override
 					public void run() {
-						winnertemp.kickPlayer("Bravo !");
+						winnertemp.kickPlayer("Congrats !");
 						endGame();
 					}
 				}, 200L);
@@ -179,7 +177,7 @@ public class GameManager implements Listener
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent e)
 	{
-		e.getPlayer().kickPlayer("Vous avez perdu ! Bonne chance pour la prochaine partie !");
+		e.getPlayer().kickPlayer("You lose ! Good luck for the next game !");
 	}
 	
 	@EventHandler

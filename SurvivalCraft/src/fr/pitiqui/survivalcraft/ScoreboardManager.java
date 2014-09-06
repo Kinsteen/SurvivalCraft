@@ -33,8 +33,8 @@ public class ScoreboardManager implements Listener
 		obj = sb.registerNewObjective("main", "dummy");
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		obj.setDisplayName(ChatColor.BOLD + "SurvivalCraft");
-		s1 = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Invincibilité"));
-		s2 = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "" + Main.numPlayers + "/" + Bukkit.getMaxPlayers() +  " joueurs"));
+		s1 = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Invincibility"));
+		s2 = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "" + Main.numPlayers + "/" + Bukkit.getMaxPlayers() +  " players"));
 		s1.setScore(60);
 		s2.setScore(-1);
 	}
@@ -52,7 +52,7 @@ public class ScoreboardManager implements Listener
 				{
 					GameManager.invic = false;
 					
-					sb.resetScores(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Invincibilité"));
+					sb.resetScores(Bukkit.getOfflinePlayer(ChatColor.GREEN + "Invincibility"));
 					
 					Bukkit.getScheduler().cancelTask(id);
 				}
@@ -66,7 +66,7 @@ public class ScoreboardManager implements Listener
 		Player p = e.getPlayer();
 		numPlayers++;
 		sb.resetScores(s2.getPlayer());
-		s2 = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "" + numPlayers + "/" + Bukkit.getMaxPlayers() +  " joueurs"));
+		s2 = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "" + numPlayers + "/" + Bukkit.getMaxPlayers() +  " players"));
 		s2.setScore(-1);
 	}
 	
@@ -75,7 +75,7 @@ public class ScoreboardManager implements Listener
 	{
 		numPlayers--;
 		sb.resetScores(s2.getPlayer());
-		s2 = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "" + numPlayers + "/" + Bukkit.getMaxPlayers() +  " joueurs"));
+		s2 = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "" + numPlayers + "/" + Bukkit.getMaxPlayers() +  " players"));
 		s2.setScore(-1);
 	}
 }
