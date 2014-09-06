@@ -3,6 +3,7 @@ package fr.pitiqui.survivalcraft;
 import java.io.File;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
@@ -108,7 +109,22 @@ public class GameManager implements Listener
 		e.getEntity().kickPlayer("Vous avez perdu ! Bonne chance pour la prochaine partie !");
 		for(Player p : Bukkit.getServer().getOnlinePlayers())
 		{
-			p.playSound(p.getLocation(), Sound.WITHER_DEATH, 10, 1);
+			p.playSound(p.getLocation(), Sound.WITHER_SPAWN, 10, 1);
+		}
+		
+		if(Bukkit.getServer().getOnlinePlayers().length == 1)
+		{
+			for(final Player p : Bukkit.getServer().getOnlinePlayers())
+			{
+				p.sendMessage(ChatColor.GREEN + "Bravo ! Vous avez gagné ! Bonne chance pour la prochaine partie !");
+				Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
+					
+					@Override
+					public void run() {
+						p.kickPlayer("Bravo !");
+					}
+				}, 200L);
+			}
 		}
 	}
 	
