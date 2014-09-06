@@ -20,8 +20,13 @@ public class Main extends JavaPlugin implements Listener
 	static String joinable = "startup";
 	static int numPlayers = 0;
 	
+	static boolean restart;
+	static int mapsize;
+	
 	public void onEnable()
 	{
+		setupConfig();
+		
 		numPlayers = Bukkit.getOnlinePlayers().length;
 		
 		ScoreboardManager.initScoreboard();
@@ -86,7 +91,7 @@ public class Main extends JavaPlugin implements Listener
 	public boolean createBorders()
 	{
 		try {
-			Integer halfMapSize = (int) Math.floor(1000/2);
+			Integer halfMapSize = (int) Math.floor(mapsize/2);
 			Integer wallHeight = 255;
 			Material wallBlock = Material.BEDROCK;
 			World w = Bukkit.getWorld("sg");
@@ -127,5 +132,13 @@ public class Main extends JavaPlugin implements Listener
 			return true;
 		}
 		return false;
+	}
+	
+	public void setupConfig()
+	{
+		this.getConfig().addDefault("restart", true);
+		this.getConfig().addDefault("mapsize", 1000);
+		restart = getConfig().getBoolean("restart");
+		mapsize = getConfig().getInt("mapsize");
 	}
 }

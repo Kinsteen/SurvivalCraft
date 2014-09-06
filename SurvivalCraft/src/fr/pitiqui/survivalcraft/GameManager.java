@@ -17,11 +17,13 @@ import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.plugin.Plugin;
 
 public class GameManager implements Listener
 {
 	static boolean invic = true;
 	static int id = 0;
+	Plugin main = Main.getPlugin(Main.class);
 	
 	public static void startGame()
 	{
@@ -41,7 +43,11 @@ public class GameManager implements Listener
 		
 		Bukkit.getServer().unloadWorld("sg", true);
 		deleteWorld(new File("sg/"));
-		Bukkit.getServer().shutdown();
+		
+		if(Main.restart == true)
+			Bukkit.getServer().shutdown();
+		else
+			Bukkit.getServer().reload();
 	}
 	
 	public static boolean deleteWorld(File path) {
@@ -118,7 +124,7 @@ public class GameManager implements Listener
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent ev) {
 		Location l = ev.getTo();
-		Integer mapSize = 1000;
+		Integer mapSize = Main.mapsize;
 		Integer halfMapSize = (int) Math.floor(mapSize/2);
 		Integer x = l.getBlockX();
 		Integer z = l.getBlockZ();
