@@ -71,7 +71,7 @@ public class PreEventManager implements Listener
 	{
 		ScoreboardManager.numPlayers--;
 		
-		if(ScoreboardManager.numPlayers == 1)
+		if(ScoreboardManager.numPlayers == 1 && Main.joinable == "ingame")
 		{
 			Player winner = null;
 			
@@ -82,48 +82,15 @@ public class PreEventManager implements Listener
 					winner = temp;
 				}
 			}
-				winner.sendMessage(ChatColor.GREEN + "Congrats ! You win !");
-				Firework fw = Bukkit.getWorld("sg").spawn(winner.getLocation(), Firework.class);
-				FireworkMeta fwm = fw.getFireworkMeta();
-	            Random r = new Random();   
-	            
-	            //Get the type
-	            int rt = r.nextInt(4) + 1;
-	            Type type = Type.BALL;       
-	            if (rt == 1) type = Type.BALL;
-	            if (rt == 2) type = Type.BALL_LARGE;
-	            if (rt == 3) type = Type.BURST;
-	            if (rt == 4) type = Type.CREEPER;
-	            if (rt == 5) type = Type.STAR;
-	           
-	            //Get our random colours   
-	            int r1i = r.nextInt(17) + 1;
-	            int r2i = r.nextInt(17) + 1;
-	            Color c1 = GameManager.getColor(r1i);
-	            Color c2 = GameManager.getColor(r2i);
-	           
-	            //Create our effect with this
-	            FireworkEffect effect = FireworkEffect.builder().flicker(r.nextBoolean()).withColor(c1).withFade(c2).with(type).trail(r.nextBoolean()).build();
-	           
-	            //Then apply the effect to the meta
-	            fwm.addEffect(effect);
-	           
-	            //Generate some random power and set it
-	            int rp = r.nextInt(2) + 1;
-	            fwm.setPower(rp);
-	           
-	            //Then apply this to our rocket
-	            fw.setFireworkMeta(fwm);
-	            
-	            final Player winnertemp = winner;
-				Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
-					
-					@Override
-					public void run() {
-						winnertemp.kickPlayer("Congrats !");
-						GameManager.endGame();
-					}
-				}, 400L);
+				
+			GameManager.endGame(winner);
+		}
+		
+		if(ScoreboardManager.numPlayers == 1 && Main.joinable == "pregame")
+		{
+			System.out.println("START CANCELED !!!");
+			Main.joinable = "true";
+			GameManager.cancelStart();
 		}
 	}
 	

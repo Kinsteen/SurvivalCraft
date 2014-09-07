@@ -62,7 +62,7 @@ public class Main extends JavaPlugin implements Listener
 		{
 			if(args.length == 0)
 			{
-				sender.sendMessage(ChatColor.GREEN + "SurvivalCraft v0.1, by pitiqui");
+				sender.sendMessage(ChatColor.GREEN + "SurvivalCraft v0.2, by pitiqui");
 				
 				return true;
 			}
@@ -71,13 +71,13 @@ public class Main extends JavaPlugin implements Listener
 			{
 				if(args.length == 1)
 				{
-					if(args[0].equalsIgnoreCase("start"))
+					if(args[0].equalsIgnoreCase("start") && sender.isOp())
 					{
 						GameManager.startGame();
 					}
-					else if(args[0].equalsIgnoreCase("end"))
+					else if(args[0].equalsIgnoreCase("end") && sender.isOp())
 					{
-						GameManager.endGame();
+						GameManager.endGame((Player) sender);
 					}
 				}
 			}

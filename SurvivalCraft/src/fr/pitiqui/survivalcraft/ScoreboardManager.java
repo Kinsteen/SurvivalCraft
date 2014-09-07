@@ -61,19 +61,17 @@ public class ScoreboardManager implements Listener
 	}
 	
 	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent e)
+	public void onPlayerQuit(PlayerQuitEvent e)
 	{
-		Player p = e.getPlayer();
-		numPlayers++;
 		sb.resetScores(s2.getPlayer());
 		s2 = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "" + numPlayers + "/" + Bukkit.getMaxPlayers() +  " players"));
 		s2.setScore(-1);
 	}
 	
 	@EventHandler
-	public void onPlayerQuit(PlayerQuitEvent e)
+	public void onPlayerJoin(PlayerJoinEvent e)
 	{
-		numPlayers--;
+		numPlayers++;
 		sb.resetScores(s2.getPlayer());
 		s2 = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "" + numPlayers + "/" + Bukkit.getMaxPlayers() +  " players"));
 		s2.setScore(-1);
