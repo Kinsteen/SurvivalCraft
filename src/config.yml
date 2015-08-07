@@ -1,0 +1,5 @@
+restart: true
+mapsize: 1000
+invictime: 60
+compass: true
+endkicktime: 15
