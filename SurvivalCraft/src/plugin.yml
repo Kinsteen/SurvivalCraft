@@ -1,0 +1,6 @@
+name: SurvivalCraft
+version: 0.2
+main: fr.pitiqui.survivalcraft.Main
+commands:
+  sc:
+    description: Main command of the SurvivalCraft plugin
