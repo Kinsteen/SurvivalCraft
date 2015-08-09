@@ -8,9 +8,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.TravelAgent;
+import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -24,7 +27,9 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.Plugin;
@@ -32,18 +37,8 @@ import org.bukkit.plugin.Plugin;
 public class GameManager implements Listener
 {
 	static boolean invic = true;
-	static int id = 0;
-	static int id10= 0;
-	static int id9 = 0;
-	static int id8 = 0;
-	static int id7 = 0;
-	static int id6 = 0;
-	static int id5 = 0;
-	static int id4 = 0;
-	static int id3 = 0;
-	static int id2 = 0;
-	static int id1 = 0;
-	static int id0 = 0;
+	private static int cd;
+	static int cdInt = 10;
 	Plugin main = Main.getPlugin(Main.class);
 	
 	public static void startGame()
@@ -52,84 +47,48 @@ public class GameManager implements Listener
 		
 		Main.joinable = "pregame";
 		
-		for(final Player p : Bukkit.getServer().getOnlinePlayers())
-		{
-			id10 = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
-				@Override
-				public void run() {
-					p.sendMessage(ChatColor.RED + "The game start in 10...");
+
+		cd = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Main.getPlugin(Main.class), new Runnable() {
+			
+			@Override
+			public void run()
+			{
+				for(final Player p : Bukkit.getOnlinePlayers())
+				{
+					p.sendMessage(ChatColor.RED + "The game start in " + cdInt + "...");
 				}
-			}, 20L);
-			id9 = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
-				@Override
-				public void run() {
-					p.sendMessage(ChatColor.RED + "The game start in 9...");
-				}
-			}, 40L);
-			id8 = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
-				@Override
-				public void run() {
-					p.sendMessage(ChatColor.RED + "The game start in 8...");
-				}
-			}, 60L);
-			id7 = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
-				@Override
-				public void run() {
-					p.sendMessage(ChatColor.RED + "The game start in 7...");
-				}
-			}, 80L);
-			id6 = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
-				@Override
-				public void run() {
-					p.sendMessage(ChatColor.RED + "The game start in 6...");
-				}
-			}, 100L);
-			id5 = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
-				@Override
-				public void run() {
-					p.sendMessage(ChatColor.RED + "The game start in 5...");
-				}
-			}, 120L);
-			id4 = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
-				@Override
-				public void run() {
-					p.sendMessage(ChatColor.RED + "The game start in 4...");
-				}
-			}, 140L);
-			id3 = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
-				@Override
-				public void run() {
-					p.sendMessage(ChatColor.RED + "The game start in 3...");
-				}
-			}, 160L);
-			id2 = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
-				@Override
-				public void run() {
-					p.sendMessage(ChatColor.RED + "The game start in 2...");
-				}
-			}, 180L);
-			id1 = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
-				@Override
-				public void run() {
-					p.sendMessage(ChatColor.RED + "The game start in 1...");
-				}
-			}, 200L);
-			id0 = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
-				@Override
-				public void run() {
-					p.sendMessage(ChatColor.RED + "The game has started !");
+				
+				cdInt--;
+				
+				if(cdInt == 0) {
 					Main.joinable = "ingame";
-					if(Main.compass) {
-						p.getInventory().addItem(new ItemStack(Material.COMPASS));
+					
+					for(Player p : Bukkit.getOnlinePlayers()) {
+						p.sendMessage(ChatColor.RED + "The game has started !");
+						
+						p.getInventory().clear();
+						p.setGameMode(GameMode.SURVIVAL);
+						if(Main.compass) {
+							p.getInventory().addItem(new ItemStack(Material.COMPASS));
+						}
 					}
+					
+					Bukkit.getScheduler().cancelTask(cd);
 				}
-			}, 220L);
-		}
+			}
+		}, 0L, 20L);
 	}
+
 	
 	public static void endGame(Player winner)
 	{
 		Main.joinable = "endgame";
+		
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			if(!p.getName().equals(winner.getName())) {
+				p.sendMessage(ChatColor.GREEN + "Congrats ! The player " + winner.getName() + " won !");
+			}
+		}
 		
 		winner.sendMessage(ChatColor.GREEN + "Congrats ! You win ! Good luck for the next game !");
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getPlugin(Main.class), new Runnable() {
@@ -190,24 +149,45 @@ public class GameManager implements Listener
 		}, (Main.endkicktime) * 20);
 	}
 	
+	public static void forceEndGame() {
+		Main.joinable = "endgame";
+		
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			p.sendMessage("Congrats ! The game has been forced to shutdown");
+		}
+		
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
+			@Override
+			public void run() {
+				for(Player p : Bukkit.getOnlinePlayers())
+				{
+					p.kickPlayer("The game is finished !");
+				}
+				
+				Bukkit.getServer().unloadWorld("sg", true);
+				deleteWorld(new File("sg/"));
+				
+				Bukkit.getServer().unloadWorld("sg_nether", true);
+				deleteWorld(new File("sg_nether/"));
+				
+				Bukkit.getServer().unloadWorld("sg_the_end", true);
+				deleteWorld(new File("sg_the_end/"));
+				
+				if(Main.restart == true)
+					Bukkit.getServer().shutdown();
+				else
+					Bukkit.getServer().reload();
+			}
+		}, (Main.endkicktime) * 20);
+	}
+	
 	public static void cancelStart()
 	{
 		Main.joinable = "true";
 		
-		Bukkit.getScheduler().cancelTask(id10);
-		Bukkit.getScheduler().cancelTask(id9);
-		Bukkit.getScheduler().cancelTask(id8);
-		Bukkit.getScheduler().cancelTask(id7);
-		Bukkit.getScheduler().cancelTask(id6);
-		Bukkit.getScheduler().cancelTask(id5);
-		Bukkit.getScheduler().cancelTask(id4);
-		Bukkit.getScheduler().cancelTask(id3);
-		Bukkit.getScheduler().cancelTask(id2);
-		Bukkit.getScheduler().cancelTask(id1);
-		Bukkit.getScheduler().cancelTask(id0);
-		Bukkit.getScheduler().cancelTask(ScoreboardManager.id);
+		Bukkit.getScheduler().cancelTask(cd);
 		
-		for(Player p : Bukkit.getServer().getOnlinePlayers())
+		for(Player p : Bukkit.getOnlinePlayers())
 		{
 			p.sendMessage(ChatColor.DARK_RED + "START CANCELED !");
 		}
@@ -229,7 +209,7 @@ public class GameManager implements Listener
 	
 	public static void startCountdown()
 	{
-		id = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getPlugin(Main.class), new Runnable() {
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getPlugin(Main.class), new Runnable() {
 			
 			@Override
 			public void run() {
@@ -239,6 +219,20 @@ public class GameManager implements Listener
 				}
 			}
 		}, 0L, 5L);
+	}
+	
+	public static void forceQuit(Player sender) {
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			if(!p.getName().equals(sender.getName())) {
+				p.sendMessage(ChatColor.RED + "THE PLAYER " + ChatColor.DARK_RED + sender.getName() + ChatColor.RED + " HAS SURRENDER !");
+			}
+		}
+		
+		//sender.teleport(sender.getBedSpawnLocation());
+		sender.setGameMode(GameMode.SPECTATOR);
+		sender.sendMessage("GG ! You're now in spec mode !");
+		ScoreboardManager.numPlayers--;
+		ScoreboardManager.resetPlayersScore();
 	}
 	
 	@EventHandler
@@ -251,6 +245,9 @@ public class GameManager implements Listener
 				e.setCancelled(true);
 			}
 		}
+		
+		if(Main.joinable != "ingame")
+			e.setCancelled(true);
 	}
 	
 	@EventHandler
@@ -268,34 +265,44 @@ public class GameManager implements Listener
 	@EventHandler
 	public void onPlayerDead(PlayerDeathEvent e)
 	{
-		ScoreboardManager.numPlayers--;
-		
-		for(Player p : Bukkit.getServer().getOnlinePlayers())
+		for(Player p : Bukkit.getOnlinePlayers())
 		{
 			p.playSound(p.getLocation(), Sound.WITHER_SPAWN, 10, 1);
 		}
-		e.setDeathMessage(ChatColor.DARK_RED + e.getEntity().getName().toUpperCase() + ChatColor.RED +" IS DEAD ! ONLY " + ChatColor.DARK_RED + ScoreboardManager.numPlayers + ChatColor.RED + " PLAYERS REMAINING ! ");
-		
-		if(ScoreboardManager.numPlayers == 1)
-		{
-			Player winner = null;
-			
-			for(Player temp : Bukkit.getServer().getOnlinePlayers())
-			{
-				if(temp != e.getEntity())
-				{
-					winner = temp;
-					endGame(winner);
-				}
-			}
+		if(ScoreboardManager.numPlayers != 1) {
+			e.setDeathMessage(ChatColor.DARK_RED + e.getEntity().getName().toUpperCase() + ChatColor.RED +" IS DEAD ! ONLY " + ChatColor.DARK_RED + ScoreboardManager.numPlayers + ChatColor.RED + " PLAYERS REMAINING ! ");
+		} else {
+			e.setDeathMessage("");
 		}
 	}
 	
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent e)
 	{
-		if(Main.joinable == "ingame" || Main.joinable == "endgame")
-			e.getPlayer().kickPlayer("You lose ! Good luck for the next game !");
+		if(Main.joinable == "ingame" || Main.joinable == "endgame") {
+			e.getPlayer().setGameMode(GameMode.SPECTATOR);
+			e.getPlayer().sendMessage("Congratulations ! You're now in spectator mode");
+			
+			Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
+			    @Override
+			    public void run() {
+					World sg = Bukkit.getServer().getWorld("sg");
+					e.getPlayer().teleport(sg.getSpawnLocation());
+			    }
+			}, 10L);
+		}
+		
+		if(Main.joinable == "true") {
+			e.getPlayer().setGameMode(GameMode.SURVIVAL);
+			
+			Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
+			    @Override
+			    public void run() {
+					World sg = Bukkit.getServer().getWorld("sg");
+					e.getPlayer().teleport(sg.getSpawnLocation());
+			    }
+			}, 10L);
+		}
 	}
 	
 	@EventHandler
@@ -366,9 +373,30 @@ public class GameManager implements Listener
 				}
 				else
 				{
-					e.getPlayer().sendMessage("Nope.");
+					e.getPlayer().sendMessage("No players has been found !");
 				}
 			}
+	}
+	
+	@EventHandler //Teleport player to world nether
+	public void onPlayerPortal(PlayerPortalEvent e) {
+		TravelAgent ta = e.getPortalTravelAgent();
+		Player caller = e.getPlayer();
+		boolean inow = caller.getWorld().getEnvironment().equals(World.Environment.NORMAL);
+		boolean innether = caller.getWorld().getEnvironment().equals(World.Environment.NETHER);
+		if (inow && e.getCause().equals(PlayerTeleportEvent.TeleportCause.NETHER_PORTAL)) {
+		Location netherloc = caller.getLocation().clone();
+		netherloc.setWorld(Bukkit.getWorld("sg_nether"));
+		netherloc.multiply(1d / 8d);
+		ta.setSearchRadius(5);
+		caller.teleport(ta.findOrCreate(netherloc));
+		}
+		if (innether && e.getCause().equals(PlayerTeleportEvent.TeleportCause.NETHER_PORTAL)) {
+		Location owloc = caller.getLocation().clone();
+		owloc.setWorld(Bukkit.getWorld("sg"));
+		owloc.multiply(8d);
+		caller.teleport(ta.findOrCreate(owloc));
+		}
 	}
 	
 	static Color getColor(int i) {

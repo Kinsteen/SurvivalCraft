@@ -1,6 +1,8 @@
 package fr.pitiqui.survivalcraft;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -33,10 +35,24 @@ public class PreEventManager implements Listener
 				
 				if(Main.joinable == "ingame")
 				{
-					e.getPlayer().kickPlayer("A game is in progress !");
+					//e.getPlayer().kickPlayer("A game is in progress !");
+					e.getPlayer().setScoreboard(ScoreboardManager.sb);
+					
+					e.getPlayer().getInventory().clear();
+					e.getPlayer().getInventory().setHelmet(new ItemStack (Material.AIR));
+					e.getPlayer().getInventory().setChestplate(new ItemStack (Material.AIR));
+					e.getPlayer().getInventory().setLeggings(new ItemStack (Material.AIR));
+					e.getPlayer().getInventory().setBoots(new ItemStack (Material.AIR));
+					
+					World sg = Bukkit.getServer().getWorld("sg");
+					e.getPlayer().teleport(sg.getSpawnLocation());
+					e.getPlayer().setGameMode(GameMode.SPECTATOR);
+					e.getPlayer().sendMessage(ChatColor.YELLOW + "You can't join the game, so you're in spectator mode.");
+					e.getPlayer().sendMessage(ChatColor.YELLOW + "You can tp to other players with /sg tp <player>");
 					return;
 				}
 				
+				e.getPlayer().setGameMode(GameMode.SURVIVAL);
 				e.getPlayer().setScoreboard(ScoreboardManager.sb);
 		    	
 				World sg = Bukkit.getServer().getWorld("sg");
@@ -47,7 +63,7 @@ public class PreEventManager implements Listener
 				e.getPlayer().getInventory().setLeggings(new ItemStack (Material.AIR));
 				e.getPlayer().getInventory().setBoots(new ItemStack (Material.AIR));
 				
-				e.getPlayer().teleport(sg.getSpawnLocation().add(0, 200, 0));
+				e.getPlayer().teleport(sg.getSpawnLocation());
 		    }
 		}, 10L);
 		
@@ -60,8 +76,6 @@ public class PreEventManager implements Listener
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent e)
 	{
-		ScoreboardManager.numPlayers--;
-		
 		if(ScoreboardManager.numPlayers == 1 && Main.joinable == "ingame")
 		{
 			Player winner = null;
@@ -95,7 +109,7 @@ public class PreEventManager implements Listener
 		
 		else if(Main.joinable == "endgame")
 		{
-			e.setMotd("The game finished !");
+			e.setMotd("The game has been finished !");
 		}
 		else if(Main.joinable == "ingame")
 		{

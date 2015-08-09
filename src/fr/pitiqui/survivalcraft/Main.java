@@ -2,9 +2,11 @@ package fr.pitiqui.survivalcraft;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.command.Command;
@@ -16,7 +18,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main extends JavaPlugin implements Listener
 {	
 	static String joinable = "startup";
-	static int numPlayers = 0;
 	
 	static boolean restart;
 	static int mapsize;
@@ -27,8 +28,6 @@ public class Main extends JavaPlugin implements Listener
 	public void onEnable()
 	{
 		setupConfig();
-		
-		numPlayers = Bukkit.getOnlinePlayers().size();
 		
 		ScoreboardManager.initScoreboard();
 		
@@ -42,6 +41,16 @@ public class Main extends JavaPlugin implements Listener
 		WorldCreator wc = new WorldCreator("sg");
 		wc.type(WorldType.NORMAL);
 		wc.createWorld();
+		
+		WorldCreator wcNether = new WorldCreator("sg_nether");
+		wcNether.environment(Environment.NETHER);
+		wcNether.seed(wc.seed());
+		wcNether.createWorld();
+		
+		WorldCreator wcEnd = new WorldCreator("sg_the_end");
+		wcEnd.environment(Environment.THE_END);
+		wcEnd.seed(wc.seed());
+		wcEnd.createWorld();
 		
 		Bukkit.getWorld("sg").setSpawnLocation(0, 70, 0);
 		
@@ -59,28 +68,54 @@ public class Main extends JavaPlugin implements Listener
 	{
 	}
 	
+	@SuppressWarnings("deprecation")
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if(cmd.getName().equalsIgnoreCase("sc"))
 		{
 			if(args.length == 0)
 			{
-				sender.sendMessage(ChatColor.GREEN + "SurvivalCraft v0.4, by pitiqui");
+				sender.sendMessage(ChatColor.GREEN + "SurvivalCraft v0.5, by pitiqui");
 				
 				return true;
 			}
 			
 			else
 			{
-				if(args.length == 1)
+				if(args.length >= 1)
 				{
 					if(args[0].equalsIgnoreCase("start") && sender.isOp())
 					{
 						GameManager.startGame();
+						sender.sendMessage("You have forced the start of the game !");
 					}
 					else if(args[0].equalsIgnoreCase("end") && sender.isOp())
 					{
-						GameManager.endGame((Player) sender);
+						GameManager.forceEndGame();
+						sender.sendMessage("You have forced the end of the game !");
+					}
+					else if(args[0].equalsIgnoreCase("surrender")) {
+						GameManager.forceQuit((Player) sender);
+					}
+					else if(args[0].equalsIgnoreCase("tp")) {
+						if(args.length == 1) {
+							sender.sendMessage("You have not precise to whom you want to teleport");
+							return true;
+						}
+						
+						if(getPlugin(Main.class).getServer().getPlayer(args[1]) != null) {
+							if(((Player) sender).getGameMode().equals(GameMode.SPECTATOR)) {
+								((Player) sender).teleport(Bukkit.getPlayer(args[1]).getLocation());
+								sender.sendMessage("Teleported !");
+							} else {
+								sender.sendMessage("You're not spectator !");
+							}
+						} else {
+							sender.sendMessage("The player doesn't exist");
+						}
+					}
+					else {
+						sender.sendMessage("Sorry, the command wasn't found");
 					}
 				}
 			}
