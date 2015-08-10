@@ -13,8 +13,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
 
-import me.confuser.barapi.BarAPI;
-
 public class PreEventManager implements Listener
 {
 	@EventHandler
@@ -46,16 +44,7 @@ public class PreEventManager implements Listener
 				if(Main.joinable == "ingame")
 				{
 					//e.getPlayer().kickPlayer("A game is in progress !");
-					e.getPlayer().setScoreboard(ScoreboardManager.sb);
-					
-					e.getPlayer().getInventory().clear();
-					e.getPlayer().getInventory().setHelmet(new ItemStack (Material.AIR));
-					e.getPlayer().getInventory().setChestplate(new ItemStack (Material.AIR));
-					e.getPlayer().getInventory().setLeggings(new ItemStack (Material.AIR));
-					e.getPlayer().getInventory().setBoots(new ItemStack (Material.AIR));
-
-					e.getPlayer().teleport(sg.getSpawnLocation());
-					e.getPlayer().setGameMode(GameMode.SPECTATOR);
+					GameManager.setSpec(e.getPlayer());
 					e.getPlayer().sendMessage(ChatColor.YELLOW + "You can't join the game, so you're in spectator mode.");
 					e.getPlayer().sendMessage(ChatColor.YELLOW + "You can tp to other players with /sg tp <player>");
 					return;

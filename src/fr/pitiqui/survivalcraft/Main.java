@@ -71,7 +71,7 @@ public class Main extends JavaPlugin implements Listener
 		{
 			if(args.length == 0)
 			{
-				sender.sendMessage(ChatColor.GREEN + "SurvivalCraft v0.5, by pitiqui");
+				sender.sendMessage(ChatColor.GREEN + "SurvivalCraft v0.6, by pitiqui");
 				
 				return true;
 			}
@@ -93,24 +93,11 @@ public class Main extends JavaPlugin implements Listener
 					else if(args[0].equalsIgnoreCase("surrender")) {
 						GameManager.forceQuit((Player) sender);
 					}
-					else if(args[0].equalsIgnoreCase("gui")) {
-						InventoryManager.createMenu((Player) sender);
-					}
 					else if(args[0].equalsIgnoreCase("tp")) {
-						if(args.length == 1) {
-							sender.sendMessage("You have not precise to whom you want to teleport");
-							return true;
-						}
-						
-						if(getPlugin(Main.class).getServer().getPlayer(args[1]) != null) {
-							if(((Player) sender).getGameMode().equals(GameMode.SPECTATOR)) {
-								((Player) sender).teleport(Bukkit.getPlayer(args[1]).getLocation());
-								sender.sendMessage("Teleported !");
-							} else {
-								sender.sendMessage("You're not spectator !");
-							}
+						if(((Player) sender).getGameMode().equals(GameMode.SPECTATOR)) {
+							InventoryManager.createMenu((Player) sender);
 						} else {
-							sender.sendMessage("The player doesn't exist");
+							sender.sendMessage("You're not spectator !");
 						}
 					}
 					else {

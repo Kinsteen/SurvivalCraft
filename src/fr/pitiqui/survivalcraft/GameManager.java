@@ -229,11 +229,8 @@ public class GameManager implements Listener
 			}
 		}
 		
-		//sender.teleport(sender.getBedSpawnLocation());
-		sender.setGameMode(GameMode.SPECTATOR);
+		setSpec(sender);
 		sender.sendMessage("GG ! You're now in spec mode !");
-		ScoreboardManager.numPlayers--;
-		ScoreboardManager.resetPlayersScore();
 		
 		if(ScoreboardManager.numPlayers == 1)
 		{
@@ -248,6 +245,24 @@ public class GameManager implements Listener
 				}
 			}
 		}
+	}
+	
+	public static void setSpec(Player p) {
+		World sg = Bukkit.getWorld("sg");
+		p.teleport(sg.getSpawnLocation());
+		
+		p.setScoreboard(ScoreboardManager.sb);
+		
+		p.getInventory().clear();
+		p.getInventory().setHelmet(new ItemStack (Material.AIR));
+		p.getInventory().setChestplate(new ItemStack (Material.AIR));
+		p.getInventory().setLeggings(new ItemStack (Material.AIR));
+		p.getInventory().setBoots(new ItemStack (Material.AIR));
+
+		p.setGameMode(GameMode.SPECTATOR);
+		
+		ScoreboardManager.numPlayers--;
+		ScoreboardManager.resetPlayersScore();
 	}
 	
 	@EventHandler
@@ -295,16 +310,8 @@ public class GameManager implements Listener
 	public void onPlayerRespawn(PlayerRespawnEvent e)
 	{
 		if(Main.joinable == "ingame" || Main.joinable == "endgame") {
-			e.getPlayer().setGameMode(GameMode.SPECTATOR);
+			setSpec(e.getPlayer());
 			e.getPlayer().sendMessage("Congratulations ! You're now in spectator mode");
-			
-			Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
-			    @Override
-			    public void run() {
-					World sg = Bukkit.getServer().getWorld("sg");
-					e.getPlayer().teleport(sg.getSpawnLocation());
-			    }
-			}, 10L);
 		}
 		
 		if(Main.joinable == "true") {
