@@ -76,7 +76,7 @@ public class ScoreboardManager implements Listener
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent e)
 	{
-		if(!e.getPlayer().getGameMode().equals(GameMode.SPECTATOR)) {
+		if(e.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) {
 			numPlayers--;
 			resetPlayersScore();
 		}
@@ -85,7 +85,7 @@ public class ScoreboardManager implements Listener
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerJoin(PlayerJoinEvent e)
 	{
-		if(!e.getPlayer().getGameMode().equals(GameMode.SPECTATOR)) {
+		if(Main.joinable == "true") {
 			numPlayers++;
 			resetPlayersScore();
 		}

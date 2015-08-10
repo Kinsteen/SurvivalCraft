@@ -14,7 +14,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 public class InventoryManager implements Listener {
 	public static void createMenu(Player p) {
-        Inventory inv = Bukkit.createInventory(null, 54, ChatColor.AQUA+"Teleport");
+        Inventory inv = Bukkit.createInventory(null, (int) Math.ceil(Bukkit.getOnlinePlayers().size() / 9) * 9, ChatColor.AQUA+"Teleport");
         
         for(Player loop : Bukkit.getOnlinePlayers()) {
             ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
