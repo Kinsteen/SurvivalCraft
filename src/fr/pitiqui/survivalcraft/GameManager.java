@@ -23,6 +23,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -233,6 +234,20 @@ public class GameManager implements Listener
 		sender.sendMessage("GG ! You're now in spec mode !");
 		ScoreboardManager.numPlayers--;
 		ScoreboardManager.resetPlayersScore();
+		
+		if(ScoreboardManager.numPlayers == 1)
+		{
+			Player winner = null;
+			
+			for(Player temp : Bukkit.getOnlinePlayers())
+			{
+				if(!temp.isDead() && temp.getGameMode().equals(GameMode.SURVIVAL))
+				{
+					winner = temp;
+					GameManager.endGame(winner);
+				}
+			}
+		}
 	}
 	
 	@EventHandler
@@ -246,7 +261,7 @@ public class GameManager implements Listener
 			}
 		}
 		
-		if(Main.joinable != "ingame")
+		if(Main.joinable != "ingame" && e.getCause() == DamageCause.ENTITY_ATTACK)
 			e.setCancelled(true);
 	}
 	

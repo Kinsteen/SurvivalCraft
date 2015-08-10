@@ -37,6 +37,7 @@ public class Main extends JavaPlugin implements Listener
 		Bukkit.getPluginManager().registerEvents(new PreEventManager(), this);
 		Bukkit.getPluginManager().registerEvents(new ScoreboardManager(), this);
 		Bukkit.getPluginManager().registerEvents(new GameManager(), this);
+		Bukkit.getPluginManager().registerEvents(new InventoryManager(), this);
 		
 		WorldCreator wc = new WorldCreator("sg");
 		wc.type(WorldType.NORMAL);
@@ -46,11 +47,6 @@ public class Main extends JavaPlugin implements Listener
 		wcNether.environment(Environment.NETHER);
 		wcNether.seed(wc.seed());
 		wcNether.createWorld();
-		
-		WorldCreator wcEnd = new WorldCreator("sg_the_end");
-		wcEnd.environment(Environment.THE_END);
-		wcEnd.seed(wc.seed());
-		wcEnd.createWorld();
 		
 		Bukkit.getWorld("sg").setSpawnLocation(0, 70, 0);
 		
@@ -96,6 +92,9 @@ public class Main extends JavaPlugin implements Listener
 					}
 					else if(args[0].equalsIgnoreCase("surrender")) {
 						GameManager.forceQuit((Player) sender);
+					}
+					else if(args[0].equalsIgnoreCase("gui")) {
+						InventoryManager.createMenu((Player) sender);
 					}
 					else if(args[0].equalsIgnoreCase("tp")) {
 						if(args.length == 1) {

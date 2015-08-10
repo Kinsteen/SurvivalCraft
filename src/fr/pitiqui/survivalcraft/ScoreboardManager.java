@@ -103,7 +103,7 @@ public class ScoreboardManager implements Listener
 			
 			for(Player temp : Bukkit.getOnlinePlayers())
 			{
-				if(temp != e.getEntity())
+				if(!temp.isDead() && temp.getGameMode().equals(GameMode.SURVIVAL))
 				{
 					winner = temp;
 					GameManager.endGame(winner);

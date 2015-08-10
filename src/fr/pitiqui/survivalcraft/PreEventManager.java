@@ -13,14 +13,24 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
 
+import me.confuser.barapi.BarAPI;
+
 public class PreEventManager implements Listener
 {
 	@EventHandler
 	public void onJoin(final PlayerJoinEvent e)
-	{	
+	{
+		e.setJoinMessage(ChatColor.YELLOW + e.getPlayer().getDisplayName() + " has joined the game ! (" + ChatColor.AQUA + (ScoreboardManager.numPlayers + 1) + ChatColor.YELLOW + "/" + ChatColor.AQUA + Bukkit.getMaxPlayers() + ChatColor.YELLOW + ")");
+		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), new Runnable() {
 		    @Override
 		    public void run() {
+				World sg = Bukkit.getServer().getWorld("sg");
+				e.getPlayer().teleport(sg.getSpawnLocation());
+				
+		    	//TitleManager.sendTitle(e.getPlayer(), ChatColor.GREEN + "Welcome !", ChatColor.AQUA + "The game will start soon", 20);
+		    	//TitleManager.setPlayerList(e.getPlayer(), "SurvivalCraft", "Good luck !");
+		    	
 				if(Main.joinable == "startup")
 				{
 					e.getPlayer().kickPlayer("Wait before the server restart !");
@@ -43,27 +53,22 @@ public class PreEventManager implements Listener
 					e.getPlayer().getInventory().setChestplate(new ItemStack (Material.AIR));
 					e.getPlayer().getInventory().setLeggings(new ItemStack (Material.AIR));
 					e.getPlayer().getInventory().setBoots(new ItemStack (Material.AIR));
-					
-					World sg = Bukkit.getServer().getWorld("sg");
+
 					e.getPlayer().teleport(sg.getSpawnLocation());
 					e.getPlayer().setGameMode(GameMode.SPECTATOR);
 					e.getPlayer().sendMessage(ChatColor.YELLOW + "You can't join the game, so you're in spectator mode.");
 					e.getPlayer().sendMessage(ChatColor.YELLOW + "You can tp to other players with /sg tp <player>");
 					return;
 				}
-				
+
 				e.getPlayer().setGameMode(GameMode.SURVIVAL);
 				e.getPlayer().setScoreboard(ScoreboardManager.sb);
-		    	
-				World sg = Bukkit.getServer().getWorld("sg");
 				
 				e.getPlayer().getInventory().clear();
 				e.getPlayer().getInventory().setHelmet(new ItemStack (Material.AIR));
 				e.getPlayer().getInventory().setChestplate(new ItemStack (Material.AIR));
 				e.getPlayer().getInventory().setLeggings(new ItemStack (Material.AIR));
 				e.getPlayer().getInventory().setBoots(new ItemStack (Material.AIR));
-				
-				e.getPlayer().teleport(sg.getSpawnLocation());
 		    }
 		}, 10L);
 		
@@ -82,7 +87,7 @@ public class PreEventManager implements Listener
 			
 			for(Player temp : Bukkit.getServer().getOnlinePlayers())
 			{
-				if(temp != e.getPlayer())
+				if(!temp.isDead() && temp.getGameMode().equals(GameMode.SURVIVAL))
 				{
 					winner = temp;
 				}
